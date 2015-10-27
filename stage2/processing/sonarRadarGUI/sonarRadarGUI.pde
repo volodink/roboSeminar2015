@@ -2,8 +2,11 @@ import processing.serial.*;
 
 Serial port;
 
-int angleData = 0;
-int sonarData = 0;
+//int[] angleData;
+//int[] sonarData;
+
+int angleData;
+int sonarData;
 
 void setup()
 {
@@ -15,53 +18,58 @@ void setup()
   println("Available serial ports:");
   println(Serial.list());
   
-  port = new Serial(this, Serial.list()[4], 9600);
+  port = new Serial(this, Serial.list()[0], 9600);
   
   port.bufferUntil('\n');
-}
-
-void draw() {
-  int dataPointCounter = 64;
-
-  // clears all
-  background(1);
-
-  //while (port.available() > 0) {
-    //serialEvent(port.read()); // read data
-  //}
-
-  for (int i = 0; i < dataPointCounter; i++)
-    drawLine(getAngleData(), scaleData(getSonarData()));
-}
-
-void serialEvent(int serial) 
-{
-  try {    // try-catch because of transmission errors
   
-  } 
-  catch(Exception e) {
-    println("no valid data");
+ // angleData = new int[36];
+ // sonarData = new int[36];
+  
+ // for (int i = 0; i < 36; i++)
+ //  angleData[i] = 90;
+   
+//  for (int i = 0; i < 36; i++)
+//   sonarData[i] = 0;
+  
+  // set inital background:
+ background(0);
+}
+
+int beginCount = 0;
+void draw()
+{
+  //println(beginCount);
+  if (angleData == 0) beginCount++;
+
+  if (beginCount == 5)
+  {
+    background(1);
+    beginCount = 0;
+  }
+
+  drawLine(angleData, scaleData(sonarData));
+}
+
+void serialEvent(Serial myPort) 
+{
+  String inString = myPort.readStringUntil('\n');
+  //println(inString);
+  if (inString != null) {
+    inString = trim(inString);
+    //println(inString);
+    String[] q = splitTokens(inString, "SR");
+    angleData = int(q[0]);
+    sonarData = int(q[1]);
+    //print(angleData); print(" "); println(sonarData);
   }
 }
 
 int scaleData(int x)
 {
-  int maxRadius = 350; // in pixels
-  int maxDistance = 4000; // in mm
+  int maxRadius = 400; // in pixels
+  int maxDistance = 500; // in mm
 
-  return (int)((x*400)/4000); // in pixels
-}
-
-int getAngleData() {
-  return (int)random(0, 180);
-  //return angleData;
-}
-
-int getSonarData()
-{
-  // read serial data
-  return (int)random(0, 4000); // in mm
-  
+  return (int)((x*maxRadius)/maxDistance); // in pixels
 }
 
 void drawLine(int angle, int radius)
