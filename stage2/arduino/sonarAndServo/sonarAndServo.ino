@@ -10,11 +10,16 @@ Servo myservo;
 
 // Starting servo position in degrees
 int initialServoPosition = 90;
-int angle = 5;
-int turnDelay = 50;
+
+// Turn angle value
+int angle = 1;
+
+// Delay before next angle turn
+int turnDelay = 65;
 
 void doServoSweep();
 void sendDataToPC(int, int);
+int getRange();
 
 void setup()
 { 
@@ -29,6 +34,15 @@ void setup()
   
   delay(2000); 
 } 
+
+void loop()
+{
+  // do one full sweep
+  doServoSweep();
+    
+  // wait next cycle
+  //delay(500);
+}
 
 int getRange()
 {
@@ -45,15 +59,6 @@ int getRange()
   range = (duration / 58) * 10; // main black magic :)
    
   return range;
-}
-
-void loop()
-{
-  // do one full sweep
-  doServoSweep();
-    
-  // wait next cycle
-  delay(2000);
 }
 
 void sendDataToPC(int angle, int range)
