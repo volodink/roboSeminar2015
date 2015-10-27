@@ -14,6 +14,7 @@ int angle = 5;
 int turnDelay = 50;
 
 void doServoSweep();
+void sendDataToPC(int, int);
 
 void setup()
 { 
@@ -25,6 +26,7 @@ void setup()
   pinMode(echoPin, INPUT);
  
   myservo.write(initialServoPosition);
+  
   delay(2000); 
 } 
 
@@ -54,6 +56,14 @@ void loop()
   delay(2000);
 }
 
+void sendDataToPC(int angle, int range)
+{
+    Serial.print("S");
+    Serial.print(angle);
+    Serial.print("R");
+    Serial.println(range);
+}
+
 void doServoSweep()
 {
   int range;
@@ -65,11 +75,8 @@ void doServoSweep()
     
     range = getRange();
     
-    Serial.print("S");
-    Serial.println(servoPosition);
-    Serial.print("R");
-    Serial.println(range);
-    
+    sendDataToPC(servoPosition, range);
+
     delay(turnDelay);
   }
   
@@ -80,10 +87,7 @@ void doServoSweep()
  
     range = getRange();
  
-    Serial.print("S");
-    Serial.println(servoPosition);
-    Serial.print("R");
-    Serial.println(range);   
+    sendDataToPC(servoPosition, range);  
    
     delay(turnDelay);
   }
@@ -95,11 +99,8 @@ void doServoSweep()
  
     range = getRange();
  
-    Serial.print("S");
-    Serial.println(servoPosition);
-    Serial.print("R");
-    Serial.println(range);   
-   
+    sendDataToPC(servoPosition, range);
+
     delay(turnDelay);
   }
 
@@ -110,16 +111,9 @@ void doServoSweep()
  
     range = getRange();
  
-    Serial.print("S");
-    Serial.println(servoPosition);
-    Serial.print("R");
-    Serial.println(range);   
-   
+    sendDataToPC(servoPosition, range);
+    
     delay(turnDelay);
   }
   
-  
 }
-
-
-
