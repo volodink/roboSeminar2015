@@ -7,7 +7,7 @@ int pos = 0;
  
 void setup() 
 { 
-  myservo.attach(9); 
+  myservo.attach(8); 
 } 
  
 void loop() 
